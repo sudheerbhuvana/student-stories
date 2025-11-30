@@ -7,6 +7,13 @@ import { connectDB } from './config/database.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
 import storyRoutes from './routes/stories.js';
+import aiRoutes from './routes/ai.js';
+import socialRoutes from './routes/social.js';
+import messageRoutes from './routes/messages.js';
+import notificationRoutes from './routes/notifications.js';
+import adminRoutes from './routes/admin.js';
+import newsletterRoutes from './routes/newsletter.js';
+import contactRoutes from './routes/contact.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { logger } from './utils/logger.js';
@@ -52,11 +59,18 @@ logger.info('Server', 'Registering routes');
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
     logger.debug('Health', 'Health check endpoint called');
-    res.json({ status: 'ok', message: 'StudentStories API is running' });
+    res.json({ status: 'ok', message: 'KL Unity API is running' });
 });
 
 // Error handling middleware

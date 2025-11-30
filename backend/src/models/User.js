@@ -25,10 +25,20 @@ const UserSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
             trim: true,
-            match: [
-                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                'Please provide a valid email'
-            ]
+            trim: true
+        },
+        role: {
+            type: String,
+            enum: ['student', 'faculty', 'admin'],
+            default: 'student'
+        },
+        department: {
+            type: String,
+            required: [true, 'Please provide a department']
+        },
+        isVerified: {
+            type: Boolean,
+            default: true // Students are auto-verified, Faculty set to false in controller
         },
         password: {
             type: String,
@@ -38,7 +48,8 @@ const UserSchema = new mongoose.Schema(
         },
         college: {
             type: String,
-            trim: true
+            trim: true,
+            default: 'Koneru Lakshmaiah Education Foundation (KLEF)'
         },
         major: {
             type: String,
@@ -85,7 +96,23 @@ const UserSchema = new mongoose.Schema(
             select: false
         },
         resetPasswordToken: String,
-        resetPasswordExpire: Date
+        resetPasswordExpire: Date,
+        followers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        following: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        followRequests: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
+        isSuspended: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true
