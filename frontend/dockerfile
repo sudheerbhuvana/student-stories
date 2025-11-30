@@ -1,0 +1,36 @@
+# Multi-stage build for React app
+
+# ---- Build Stage ----
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including devDeps for build)
+RUN npm ci --legacy-peer-deps
+
+# Copy source code
+COPY . .
+
+# Build the app
+RUN npm run build
+
+
+# ---- Production Stage ----
+FROM node:22-alpine AS production
+
+WORKDIR /app
+
+# Install a lightweight static server
+RUN npm install -g serve
+
+# Copy built app from builder stage
+COPY --from=builder /app/dist ./dist
+
+# Expose frontend port
+EXPOSE 3000
+
+# Serve the built app
+CMD ["serve", "-s", "dist", "-l", "3000"]
